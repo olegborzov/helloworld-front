@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  backend: 'https://helloworld.com',
+  backend: 'https://dev.helloworld.com',
   snackbarDuration: 3000,
 };

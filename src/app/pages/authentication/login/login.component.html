@@ -1,0 +1,24 @@
+<div class="example-container">
+  <div class="form-container">
+    <form [formGroup]="form" (submit)="send()">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label> Email
+        </mat-label>
+        <input matInput formControlName="email" required>
+        <mat-error *ngIf="form.controls.email.touched && form.controls.email.invalid">
+          <span *ngIf="form.controls.email.errors.required">Введите email.</span>
+          <span *ngIf="form.controls.email.errors.email">Некорректный email.</span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label> Пароль
+        </mat-label>
+        <input matInput formControlName="password" type="password">
+        <mat-error *ngIf="form.controls.password.touched && form.controls.password.invalid">
+          <span *ngIf="form.controls.password.errors.required">Введите пароль.</span>
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Log In</button>
+    </form>
+  </div>
+</div>
