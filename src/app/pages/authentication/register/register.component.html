@@ -1,58 +1,42 @@
-<div class="background-pattern page" fxLayout="column" fxLayoutAlign="center center">
-  <div [@fadeInUp] class="card border-radius elevation">
-    <div class="header padding background-primary" fxLayout="column" fxLayoutAlign="center center">
-      <div class="logo fill-primary-contrast">
-        <svg viewBox="0 0 33.74 33.99" xmlns="http://www.w3.org/2000/svg"><title>icon</title>
-          <path d="M26.83,19.33c-.36.37-.73.71-1.09,1l.31,3.22a5.41,5.41,0,0,1-2.43,5.14L15.72,34l-.67-8.74a6.54,6.54,0,0,1-6.57-6.53L0,18.18l5-7.93a5.41,5.41,0,0,1,5.23-2.54l3.1.31q.49-.55,1.05-1.11C20.78.54,30.82-.62,33.48.26,34.37,2.93,33.2,13,26.83,19.33Zm-.45-12a3.77,3.77,0,1,0,0,5.33A3.77,3.77,0,0,0,26.38,7.36ZM2.82,23.72l3.24-3.24a8.24,8.24,0,0,0,7.11,7.1L10.5,30.25,7.74,33V29.46L2.41,31.23l1.78-5.32H.64Z"></path>
-        </svg>
-      </div>
-    </div>
-    <div class="padding" fxLayout="column" fxLayoutGap="16px" [formGroup]="form">
-      <div fxFlex="auto" fxLayout="column">
-        <mat-form-field fxFlex="grow">
-          <mat-label>ФИО</mat-label>
-          <input matInput required formControlName="name">
-          <mat-error *ngIf="form.get('name').hasError('required')">Укажите ФИО</mat-error>
-          <mat-error *ngIf="form.get('name').hasError('minlength')">
+<div class="center-container">
+  <div class="form-container">
+    <form [formGroup]="form" (submit)="send()">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>ФИО</mat-label>
+        <input matInput formControlName="name" required>
+        <mat-error *ngIf="form.controls.name.touched && form.controls.name.invalid">
+          <span *ngIf="form.controls.name.errors.required">Введите ФИО.</span>
+          <span *ngIf="form.controls.name.errors?.minlength">
             ФИО должно быть длиннее {{ minNameLength }} символов
-          </mat-error>
-        </mat-form-field>
+          </span>
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field fxFlex="grow">
-          <mat-label>Email</mat-label>
-          <input matInput required formControlName="email">
-          <mat-error *ngIf="form.get('email').hasError('required')">Укажите ваш Email</mat-error>
-          <mat-error *ngIf="form.get('email').hasError('email')">Неправильный формат Email</mat-error>
-        </mat-form-field>
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required>
+        <mat-error *ngIf="form.controls.email.touched && form.controls.email.invalid">
+          <span *ngIf="form.controls.email.errors.required">Введите email.</span>
+          <span *ngIf="form.controls.email.errors.email">Некорректный email.</span>
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field fxFlex="grow">
-          <mat-label>Пароль</mat-label>
-          <input matInput [type]="inputType" formControlName="password" required>
-          <button type="button" mat-icon-button matSuffix
-                  (click)="toggleVisibility()"
-                  matTooltip="{{ visible ? 'Скрыть пароль' : 'Показать пароль' }}">
-            <mat-icon *ngIf="visible">visibility</mat-icon>
-            <mat-icon *ngIf="!visible">visibility_off</mat-icon>
-          </button>
-          <mat-error *ngIf="form.get('password').hasError('required')">Заполните пароль</mat-error>
-          <mat-error *ngIf="form.get('password').hasError('minlength')">
-            Пароль должен быть длиннее {{ minPasswordLength }} символов
-          </mat-error>
-        </mat-form-field>
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Пароль</mat-label>
+        <input matInput formControlName="password" type="password">
+        <mat-error *ngIf="form.controls.password.touched && form.controls.password.invalid">
+          <span *ngIf="form.controls.password.errors.required">Введите пароль.</span>
+        </mat-error>
+      </mat-form-field>
 
-        <mat-form-field fxFlex="grow">
-          <mat-label>Повторите пароль</mat-label>
-          <input matInput [type]="inputType" formControlName="passwordConfirm" required>
-          <button type="button" mat-icon-button matSuffix
-                  (click)="toggleVisibility()"
-                  matTooltip="{{ visible ? 'Скрыть пароль' : 'Показать пароль' }}">
-            <mat-icon *ngIf="visible">visibility</mat-icon>
-            <mat-icon *ngIf="!visible">visibility_off</mat-icon>
-          </button>
-          <mat-error *ngIf="form.get('passwordConfirm').hasError('required')">Заполните пароль</mat-error>
-          <mat-error *ngIf="form.get('passwordConfirm').errors?.match">Пароли должны совпадать</mat-error>
-        </mat-form-field>
-      </div>
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Повторите пароль</mat-label>
+        <input matInput formControlName="passwordConfirm" type="password">
+        <mat-error *ngIf="form.controls.passwordConfirm.touched && form.controls.passwordConfirm.invalid">
+          <span *ngIf="form.controls.passwordConfirm.errors.required">Введите пароль.</span>
+          <span *ngIf="form.controls.passwordConfirm.errors?.match">Пароли должны совпадать.</span>
+        </mat-error>
+      </mat-form-field>
 
       <div fxLayout="row" fxLayoutAlign="center center">
         <mat-checkbox class="caption" formControlName="agree">
@@ -60,14 +44,12 @@
         </mat-checkbox>
       </div>
 
-      <button type="button" color="primary" mat-raised-button
-              [disabled]="!this.form.valid"
-              (click)="send()">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
         Зарегистрироваться
       </button>
       <p class="secondary-text text-center">
         <a [routerLink]="['/login']">Войти на сайт</a>
       </p>
-    </div>
+    </form>
   </div>
 </div>

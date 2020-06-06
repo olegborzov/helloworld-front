@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 export function getErrors(errData: any): Observable<HttpResponseInterface> {
   const errors = Array.isArray(errData.error.error) ? errData.error.error : [{code: -1, message: 'Неизвестная ошибка'}];
-  return of({ success: false, errors: errors });
+  return of({ success: false, errors });
 }
 
 export function showError(response: HttpResponseInterface, snackbar: MatSnackBar): HttpErrorData {

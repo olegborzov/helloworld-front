@@ -1,12 +1,16 @@
-.center-container {
+.main-container {
   text-align: center;
 
-  .form-container {
+  .inline-container {
     width: 400px;
     margin: 200px auto 0;
 
     .form-field {
       display: block;
+    }
+
+    button.logout-button {
+      margin-top: 20px;
     }
   }
 }

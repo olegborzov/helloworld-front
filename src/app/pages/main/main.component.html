@@ -1,1 +1,31 @@
-<p>main works!</p>
+<div class="main-container">
+  <div class="inline-container">
+    <h1>Hello, World!</h1>
+    <form [formGroup]="form" (submit)="sendEmail()">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required>
+        <mat-error *ngIf="form.controls.email.touched && form.controls.email.invalid">
+          <span *ngIf="form.controls.email.errors.required">Введите email.</span>
+          <span *ngIf="form.controls.email.errors.email">Некорректный email.</span>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Сообщение</mat-label>
+        <input matInput formControlName="message" required>
+        <mat-error *ngIf="form.controls.message.touched && form.controls.message.invalid">
+          <span *ngIf="form.controls.message.errors.required">Введите сообщение.</span>
+          <span *ngIf="form.controls.message.errors.minlength">Слишком короткое сообщение.</span>
+          <span *ngIf="form.controls.message.errors.maxlength">Слишком длинное сообщение.</span>
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid" (click)="sendEmail()">
+        Отправить email
+      </button>
+    </form>
+
+    <button mat-raised-button color="accent" class="logout-button" (click)="logout()">Выйти с сайта</button>
+  </div>
+</div>

@@ -14,11 +14,8 @@ import * as HttpStatus from 'http-status-codes';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-
   form: FormGroup;
 
-  inputType = 'password';
-  visible = false;
   minPasswordLength = 4;
   minNameLength = 5;
 
@@ -31,6 +28,8 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.subscribeUser();
+
     this.form = this.fb.group({
         name: ['', [Validators.required, Validators.minLength(this.minNameLength)]],
         email: ['', [Validators.required, Validators.email]],
@@ -71,15 +70,12 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  toggleVisibility() {
-    if (this.visible) {
-      this.inputType = 'password';
-      this.visible = false;
-      this.cd.markForCheck();
-    } else {
-      this.inputType = 'text';
-      this.visible = true;
-      this.cd.markForCheck();
-    }
+  private subscribeUser() {
+    this.userService.user$.subscribe(user => {
+      if (user) {
+        showMessage(`Вы уже авторизованы, как ${user.email}`, this.snackbar);
+        this.router.navigate(['/']);
+      }
+    });
   }
 }

@@ -15,7 +15,6 @@ import { showError, showMessage } from '../../../shared/utils/http';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
   form: FormGroup;
 
   rememberMe = false;
@@ -32,6 +31,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.subscribeUser();
+
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(this.minPasswordLength)]],
@@ -60,5 +61,14 @@ export class LoginComponent implements OnInit {
         }
       }
     );
+  }
+
+  private subscribeUser() {
+    this.userService.user$.subscribe(user => {
+      if (user) {
+        showMessage(`Вы уже авторизованы, как ${user.email}`, this.snackbar);
+        this.router.navigate(['/']);
+      }
+    });
   }
 }

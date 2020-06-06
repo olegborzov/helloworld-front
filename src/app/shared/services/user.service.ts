@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
@@ -17,7 +17,7 @@ import { getErrors } from '../utils/http';
 export class UserService {
   meUrl = `${environment.backend}/api/auth/me`;
 
-  private currentUser: ReplaySubject<User> = new ReplaySubject<User>();
+  private currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
   constructor(
     private router: Router,
@@ -34,6 +34,14 @@ export class UserService {
 
   public updateUser(user: User) {
     this.currentUser.next(user);
+    if (!user) {
+      this.snackbar.open(
+        `Вы не авторизованы. Войдите на сайт`,
+        'ОК',
+        {duration: environment.snackbarDuration}
+      );
+      this.router.navigate(['/login']);
+    }
   }
 
   private loadCurrentUser() {
@@ -42,12 +50,7 @@ export class UserService {
     ).subscribe((res: HttpResponseInterface) => {
       const currentUrl = this.activatedRoute.snapshot.url.join();
       if (!res.success && !currentUrl.includes('/login')) {
-        this.snackbar.open(
-          `Вы не авторизованы. Войдите на сайт`,
-          'ОК',
-          {duration: environment.snackbarDuration}
-        );
-        this.router.navigate(['/login']);
+        this.updateUser(null);
       }
       this.updateUser(User.fromJson(res.result));
     });

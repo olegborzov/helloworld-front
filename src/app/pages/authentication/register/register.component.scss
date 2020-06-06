@@ -1,25 +1,12 @@
-@import "var";
+.center-container {
+  text-align: center;
 
-.page {
-  display: block;
-  height: 100%;
-  width: 100%;
-}
+  .form-container {
+    width: 400px;
+    margin: 200px auto 0;
 
-.card {
-  width: 380px;
-
-  @include media-xs {
-    width: 300px;
+    .form-field {
+      display: block;
+    }
   }
-
-  .header {
-    border-top-left-radius: $border-radius;
-    border-top-right-radius: $border-radius;
-  }
-}
-
-.logo {
-  width: 80px;
-  height: 80px;
 }
