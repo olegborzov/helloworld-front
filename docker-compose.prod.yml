@@ -1,0 +1,1 @@
+version: '3'services:  hw_front_prod:    image: hw_front_prod    restart: on-failure    build:      context: .      args:        STAGE_ENV: "prod"      dockerfile: Dockerfile    ports:      - 8091:80

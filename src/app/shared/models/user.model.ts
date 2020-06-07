@@ -1,4 +1,4 @@
-import { BaseModel } from '../../core/utils/model';
+import { BaseModel } from './base.model';
 
 export class User extends BaseModel {
   id: number;
