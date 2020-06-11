@@ -1,4 +1,4 @@
-# HelloWorld front
+# HelloWorld frontend
 Фронт-часть приложения Helloworld с возможностью регистрации, авторизации и отправки Email.
 
 ### Автор
