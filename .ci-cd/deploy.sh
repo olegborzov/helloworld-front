@@ -1,30 +1,39 @@
 # Пример вызова скрипта
-# nohup ./ci-cd/deploy.sh dev "123456:ABCDEsaw" "-1001018" &
+# nohup bash .ci-cd/deploy.sh \
+#   dev \
+#   docker.helloworld.com \
+#   docker_user \
+#   docker_password \
+#   "110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw" \
+#   "-1001234567890"
+
 
 # 1. Устанавливаем из входных параметров переменные окружения
 export HW_ENV=$1
-export HW_TG_BOT_TOKEN=$2
-export HW_TG_CHAT_ID=$3
-printf "\n\n### %s - start_deploy###\n" "$(date)"
+HW_BRANCH=$([ "${HW_ENV?}" == 'prod' ] && echo master || echo dev)
+export HW_BRANCH
+export HW_DOCKER_REGISTRY=$2  # Хост репозитория Docker
+HW_DOCKER_LOGIN=$3            # Логин для репозитория Docker
+HW_DOCKER_PASSWORD=$4         # Пароль для репозитория Docker
+HW_TG_BOT_TOKEN=$5            # Токен для бота Telegram
+HW_TG_CHAT_ID=$6              # ID чата/канала в Telegram для отправки уведомлений
 
 
-# 2. Запускаем билд
-sh ./.ci-cd/curl_tg.sh "#start_build"
-docker build -f Dockerfile -t "hw_front_${HW_ENV}:new"
-build_result=$?
-printf "\nBUILD result %s\n" "$build_result"
+# 2. Деплой
+sh ./.ci-cd/curl_tg.sh "$HW_TG_BOT_TOKEN" "$HW_TG_CHAT_ID" "$HW_ENV" "#deploy_start"
 
-if [ "$build_result" != 0 ]; then
-  sh ./.ci-cd/curl_tg.sh "#build_failed"
-  docker image rm "hw_front_${HW_ENV}:new"
-  exit 1
-fi
+/usr/bin/docker login "${HW_DOCKER_REGISTRY}" -u "$HW_DOCKER_LOGIN" -p "${HW_DOCKER_PASSWORD}"
 
+/usr/bin/docker pull "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:new"
+/usr/bin/docker pull "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:latest"
 
-# 3. Деплой
-docker tag "hw_front_${HW_ENV}:latest" "hw_front_${HW_ENV}:previous"
-docker tag "hw_front_${HW_ENV}:new" "hw_front_${HW_ENV}:latest"
-docker-compose -p "hw_front_${HW_ENV}" up -d  --remove-orphans
+/usr/bin/docker tag "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:latest" "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:previous"
+/usr/bin/docker tag "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:new" "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:latest"
 
-sh ./.ci-cd/curl_tg.sh "#deploy_success"
+/usr/bin/docker push "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:previous"
+/usr/bin/docker push "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:latest"
+
+/usr/local/bin/docker-compose -p "hw_front_${HW_ENV}" up -d  --remove-orphans
+
+sh ./.ci-cd/curl_tg.sh "$HW_TG_BOT_TOKEN" "$HW_TG_CHAT_ID" "$HW_ENV" "#deploy_success"
 

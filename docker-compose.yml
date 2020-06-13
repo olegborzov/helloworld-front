@@ -1,1 +1,1 @@
-version: '3'services:  front:    image: "hw_front_${HW_ENV}:latest"    restart: on-failure    build:      context: .      args:        STAGE_ENV: "${HW_ENV}"      dockerfile: Dockerfile    ports:      - 8091:80
+version: '3'services:  front:    image: "${HW_DOCKER_REGISTRY}/hw_front_${HW_BRANCH}:latest"    restart: on-failure    build:      context: .      args:        STAGE_ENV: "${HW_ENV}"      dockerfile: Dockerfile    ports:      - 8091:80
