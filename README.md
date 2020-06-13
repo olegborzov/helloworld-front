@@ -6,8 +6,11 @@
 http://olegborzov.ru/
 
 ## Структура
-- **src/app/core**
-    - **interceptors**
+- **.ci-cd** - sh-скрипты для деплоя проекта на сервер
+    - curl_tg.sh - отправка уведомлений о процессе деплоя в Telegram
+    - deploy.sh - запуск деплоя на сервере после билда и прогона тестов в Github Actions
+    - rollback.sh - откат деплоя на предыдущую версию
+- **src/app/core/interceptors** - перехватчики запросов
 - **src/app/pages** - модули и компоненты приложения
 - **src/app/shared** - разделяемый функционал для модулей и компонентов
     - **interfaces**
@@ -22,8 +25,15 @@ $ npm start
 ```
 
 ## Docker
-Запуск контейнеров
+Запуск билда образа:
 ```
-$ docker-compose -f docker-compose.dev.yml up -d
-$ docker-compose -f docker-compose.prod.yml up -d
+export BRAHCH_NAME=dev
+$ docker build --build-arg INSEO_FRONT_ENV=dev -t inseo_front .
+```
+
+Запуск контейнера с последней версией образа:
+```
+export HW_ENV=dev
+export HW_DOCKER_REGISTRY=docker.helloworld.ru
+$ docker-compose -f docker-compose.yml up -d 
 ```
