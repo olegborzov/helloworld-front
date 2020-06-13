@@ -1,6 +1,6 @@
 <div class="main-container">
   <div class="inline-container">
-    <h1>Привет, {{ (userService.user$ | async)?.name }}</h1>
+    <h1>Привет, {{ (user$ | async)?.name ? (user$ | async).name : 'пользователь' }}</h1>
 
     <form [formGroup]="form" (submit)="sendEmail()">
       <mat-form-field class="form-field" appearance="outline">

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { User } from '../../shared/models/user.model';
 import { AuthService } from '../../shared/services/auth.service';
 import { TasksService } from '../../shared/services/tasks.service';
 import { UserService } from '../../shared/services/user.service';
@@ -13,6 +15,7 @@ import { showMessage } from '../../shared/utils/http';
 })
 export class MainComponent implements OnInit {
   form: FormGroup;
+  user$: Observable<User>;
 
   constructor(
     private fb: FormBuilder,
@@ -27,6 +30,7 @@ export class MainComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       message: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
     });
+    this.user$ = this.userService.user$;
   }
 
   logout() {
