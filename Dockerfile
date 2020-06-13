@@ -12,9 +12,9 @@ RUN npm set progress=false && npm install
 
 ADD . /app
 
-ARG STAGE_ENV
-RUN echo "branch_name=$STAGE_ENV" && \
-  if [ "${STAGE_ENV}" == "prod" ] ; then \
+ARG BRAHCH_NAME
+RUN echo "branch_name=$BRAHCH_NAME" && \
+  if [ "${BRAHCH_NAME}" == "master" ] ; then \
       npm run build:prod ; \
   else \
       npm run build:dev ; \
