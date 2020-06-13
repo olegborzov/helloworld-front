@@ -1,0 +1,48 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deploy"
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Спуливаем содержимое
+    - uses: actions/checkout@v2
+    
+    # Устанавливаем 
+    - name: Extract branch name
+      shell: bash
+      run: |
+        echo "::set-env name=BRANCH_NAME::${GITHUB_REF##*/}"
+        echo "${{ env.BRANCH_NAME }}"
+
+    # Собираем контейнер
+    - name: Build and push image
+      uses: docker/build-push-action@v1.1.0
+      with:
+        repository: hw_front_${{ env.BRANCH_NAME }}
+        dockerfile: ./conf/docker/Dockerfile
+        registry: ${{ secrets.DOCKER_REGISTRY }}
+        username: ${{ secrets.DOCKER_LOGIN }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: new
+
+    # Деплой
+    - name: Deploy prod
+      if: env.BRANCH_NAME == 'master'
+      uses: wei/curl@v1.1.1
+      with:
+        args: -X POST ${{ secrets.DEPLOY_HOST }}/modules/git/public/web-hook.php?uuid=${{ secrets.DEPLOY_FRONT_PROD_TOKEN }}
+        
+    - name: Deploy dev
+      if: env.BRANCH_NAME == 'dev'
+      uses: wei/curl@v1.1.1
+      with:
+        args: -X POST ${{ secrets.DEPLOY_HOST }}/modules/git/public/web-hook.php?uuid=${{ secrets.DEPLOY_FRONT_DEV_TOKEN }}
