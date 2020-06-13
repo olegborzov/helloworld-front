@@ -28,11 +28,12 @@ jobs:
       uses: docker/build-push-action@v1.1.0
       with:
         repository: hw_front_${{ env.BRANCH_NAME }}
-        dockerfile: ./conf/docker/Dockerfile
+        dockerfile: ./Dockerfile
         registry: ${{ secrets.DOCKER_REGISTRY }}
         username: ${{ secrets.DOCKER_LOGIN }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         tags: new
+        build_args: BRAHCH_NAME=${{ env.BRANCH_NAME }}
 
     # Деплой
     - name: Deploy prod
