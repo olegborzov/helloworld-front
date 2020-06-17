@@ -27,13 +27,12 @@ $ npm start
 ## Docker
 Запуск билда образа:
 ```
-export BRAHCH_NAME=dev
-$ docker build --build-arg INSEO_FRONT_ENV=dev -t inseo_front .
+$ docker build --build-arg BRAHCH_NAME=dev -t hw_front .
 ```
 
 Запуск контейнера с последней версией образа:
 ```
 export HW_ENV=dev
-export HW_DOCKER_REGISTRY=docker.helloworld.ru
+export HW_DOCKER_REGISTRY=docker.helloworld.ru  # меняем на свой
 $ docker-compose -f docker-compose.yml up -d 
 ```
