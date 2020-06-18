@@ -1,9 +1,10 @@
 # HelloWorld frontend
-Фронт-часть приложения Helloworld с возможностью регистрации, авторизации и отправки Email.
+Фронт-часть приложения Helloworld с возможностью регистрации, авторизации и отправки Email.<br>
+Статья на Habr - https://habr.com/ru/company/domclick/blog/506802/
 
 ### Автор
 Борзов Олег<br>
-http://olegborzov.ru/
+https://olegborzov.ru/
 
 ## Структура
 - **.ci-cd** - sh-скрипты для деплоя проекта на сервер
